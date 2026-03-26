@@ -31,6 +31,8 @@ export default function ProjectGrid() {
 
   const dashboardProject = projects.find((p) => p.id === viewDashboard);
 
+  const openDemo = (id: string) => setViewDashboard(id);
+
   return (
     <>
       {/* Filter bar */}
@@ -48,95 +50,108 @@ export default function ProjectGrid() {
 
       {/* Grid */}
       <div className={styles.grid}>
-        {filtered.map((project) => (
-          <article key={project.id} className={`glass-card ${styles.card}`}>
-            {/* Thumbnail — shows real image if it loads, otherwise icon fallback */}
-            <div
-              className={styles.thumbnail}
-              style={{ background: `linear-gradient(135deg, ${categoryColors[project.category]}22, ${categoryColors[project.category]}08)` }}
-            >
-              {/* Real thumbnail image — hidden via onError if file not found */}
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src={project.thumbnail}
-                alt={project.title}
-                className={styles.thumbnailImg}
-                onError={(e) => {
-                  (e.currentTarget as HTMLImageElement).style.display = "none";
-                }}
-              />
-              {/* Icon fallback (always rendered, shows through when image fails/absent) */}
+        {filtered.map((project) => {
+          const canOpen = !!(project.demoUrl && project.embedDashboard);
+          return (
+            <article key={project.id} className={`glass-card ${styles.card}`}>
+              {/* Thumbnail — click to open dashboard if available */}
               <div
-                className={styles.thumbnailIcon}
-                style={{ color: categoryColors[project.category] }}
+                className={`${styles.thumbnail} ${canOpen ? styles.thumbnailClickable : ""}`}
+                style={{
+                  background: `linear-gradient(135deg, ${categoryColors[project.category]}22, ${categoryColors[project.category]}08)`,
+                  cursor: canOpen ? "pointer" : "default",
+                }}
+                onClick={() => canOpen && openDemo(project.id)}
               >
-                <LayoutDashboard size={40} />
-              </div>
-              {project.featured && (
-                <div className={styles.featuredBadge}>Featured</div>
-              )}
-            </div>
-
-            {/* Content */}
-            <div className={styles.content}>
-              <div className={styles.categoryRow}>
-                <span
-                  className={styles.category}
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src={project.thumbnail}
+                  alt={project.title}
+                  className={styles.thumbnailImg}
+                  onError={(e) => {
+                    (e.currentTarget as HTMLImageElement).style.display = "none";
+                  }}
+                />
+                <div
+                  className={styles.thumbnailIcon}
                   style={{ color: categoryColors[project.category] }}
                 >
-                  {project.category}
-                </span>
+                  <LayoutDashboard size={40} />
+                </div>
+
+                {/* Hover overlay for demo projects */}
+                {canOpen && (
+                  <div className={styles.thumbnailPlayOverlay}>
+                    <span>▶ Xem Demo</span>
+                  </div>
+                )}
+
+                {project.featured && (
+                  <div className={styles.featuredBadge}>Featured</div>
+                )}
               </div>
 
-              <h3 className={styles.title}>{project.title}</h3>
-              <p className={styles.description}>{project.description}</p>
-
-              {/* Tags */}
-              <div className={styles.tags}>
-                {project.tags.map((t) => (
-                  <span key={t} className="tag">
-                    {t}
+              {/* Content */}
+              <div className={styles.content}>
+                <div className={styles.categoryRow}>
+                  <span
+                    className={styles.category}
+                    style={{ color: categoryColors[project.category] }}
+                  >
+                    {project.category}
                   </span>
-                ))}
-              </div>
+                </div>
 
-              {/* Actions */}
-              <div className={styles.actions}>
-                {project.demoUrl && (
-                  <button
-                    className={`btn-primary ${styles.btnSm}`}
-                    onClick={() =>
-                      project.embedDashboard
-                        ? setViewDashboard(project.id)
-                        : window.open(project.demoUrl, "_blank")
-                    }
-                  >
-                    <ExternalLink size={14} />
-                    {project.embedDashboard ? "Live Demo" : "Xem Demo"}
-                  </button>
-                )}
-                {project.githubUrl && (
-                  <a
-                    href={project.githubUrl}
-                    target="_blank"
-                    rel="noreferrer"
-                    className={`btn-ghost ${styles.btnSm}`}
-                  >
-                    <GitBranch size={14} />
-                    Code
-                  </a>
-                )}
+                <h3 className={styles.title}>{project.title}</h3>
+                <p className={styles.description}>{project.description}</p>
+
+                {/* Tags */}
+                <div className={styles.tags}>
+                  {project.tags.map((t) => (
+                    <span key={t} className="tag">
+                      {t}
+                    </span>
+                  ))}
+                </div>
+
+                {/* Actions */}
+                <div className={styles.actions}>
+                  {project.demoUrl && (
+                    <button
+                      className={`btn-primary ${styles.btnSm}`}
+                      onClick={() =>
+                        project.embedDashboard
+                          ? openDemo(project.id)
+                          : window.open(project.demoUrl, "_blank")
+                      }
+                    >
+                      <ExternalLink size={14} />
+                      {project.embedDashboard ? "Live Demo" : "Xem Demo"}
+                    </button>
+                  )}
+                  {project.githubUrl && (
+                    <a
+                      href={project.githubUrl}
+                      target="_blank"
+                      rel="noreferrer"
+                      className={`btn-ghost ${styles.btnSm}`}
+                    >
+                      <GitBranch size={14} />
+                      Code
+                    </a>
+                  )}
+                </div>
               </div>
-            </div>
-          </article>
-        ))}
+            </article>
+          );
+        })}
       </div>
 
       {/* Dashboard modal */}
-      {viewDashboard && dashboardProject && (
+      {viewDashboard && dashboardProject?.demoUrl && (
         <DashboardViewer
           title={dashboardProject.title}
-          url={dashboardProject.demoUrl!}
+          url={dashboardProject.demoUrl}
           onClose={() => setViewDashboard(null)}
         />
       )}
