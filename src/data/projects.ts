@@ -35,7 +35,7 @@ export const projects: Project[] = [
     thumbnail: "/thumbnails/stock-thumbnail.png",
     demoUrl: undefined,          // ← thêm link nếu có deploy Streamlit
     embedDashboard: false,
-    githubUrl: "https://github.com", // ← thay bằng link repo thật của bạn
+    githubUrl: "https://github.com/trinc-AI-Porfolio/stock-analysis-ba",
     featured: true,
   },
   // ─── DỰ ÁN MẪU (xóa khi có đủ dự án thật) ───────────────
