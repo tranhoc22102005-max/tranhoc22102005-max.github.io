@@ -33,10 +33,10 @@ export const projects: Project[] = [
     category: "Data Analytics",
     tags: ["Python", "SQL", "Power BI", "Scikit-learn", "Pandas", "Seaborn", "VAR", "Random Forest"],
     thumbnail: "/thumbnails/stock-thumbnail.png",
-    // 🔗 Thay bằng link Streamlit Cloud sau khi deploy:
-    // VD: "https://trinc-ai-porfolio-stock-analysis-ba-app-xxxx.streamlit.app"
+    // 🔗 Thay bằng link Streamlit Cloud sau khi deploy.
+    // Sau đó đổi embedDashboard: true để nhúng vào modal
     demoUrl: "http://localhost:8501",
-    embedDashboard: true,
+    embedDashboard: false,
     githubUrl: "https://github.com/trinc-AI-Porfolio/stock-analysis-ba",
     featured: true,
   },
