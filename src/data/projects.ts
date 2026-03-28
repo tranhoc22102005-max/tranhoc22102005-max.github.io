@@ -39,6 +39,23 @@ export const projects: Project[] = [
     githubUrl: "https://github.com/trinc-AI-Porfolio/stock-analysis-ba",
     featured: true,
   },
+    {
+    id: "trustmed-ai",
+    title: "TrustMed-AI: Brain Tumor MRI Classification",
+    description:
+      "Hệ thống phân loại u não từ ảnh MRI với Uncertainty Quantification, Explainability (Grad-CAM++) và Selective Prediction.",
+    longDescription:
+      "Dự án NCKH FPT 2025: Phân loại 4 loại u não từ ảnh MRI " +
+      "sử dụng kiến trúc NeuroFusionNet. Tích hợp MC Dropout, " +
+      "Grad-CAM++, Selective Prediction và Gradio demo.",
+    category: "Machine Learning",
+    tags: ["PyTorch", "Grad-CAM", "MC Dropout", "Gradio", "Medical AI", "timm"],
+    thumbnail: "/thumbnails/ml.png",
+    embedDashboard: false,
+    githubUrl: "https://github.com/tranhoc22102005-max",
+    featured: true,
+  },
+
   // ─── DỰ ÁN MẪU (xóa khi có đủ dự án thật) ───────────────
   {
     id: "sales-dashboard",
